@@ -19,9 +19,16 @@
         raycaster="objects: [gps-entity-place];"
         vr-mode-ui="enabled: false"
 		embedded
-		arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
-        <a-camera gps-camera rotation-reader>
-		</a-camera>
+        arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
+        <a-box 
+            depth="5" 
+            height="5" 
+            width="5"
+            color="tomato" 
+            gps-entity-place="latitude: 47.580458; longitude: 12.572712" 
+            position="0 0 0">
+        </a-box>
+        <a-camera gps-camera rotation-reader></a-camera>
 	</a-scene>
 </body>
 </html>
