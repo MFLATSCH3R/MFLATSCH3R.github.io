@@ -1,33 +1,6 @@
 window.onload = () => {
-    let method = 'dynamic';
-
-    // if you want to statically add places, de-comment following line
-    method = 'static';
-
-    if (method === 'static') {
-        let places = staticLoadPlaces();
-        renderPlaces(places);
-    }
-
-    if (method !== 'static') {
-
-        // first get current user location
-        return navigator.geolocation.getCurrentPosition(function (position) {
-
-            // than use it to load from remote APIs some places nearby
-            dynamicLoadPlaces(position.coords)
-                .then((places) => {
-                    renderPlaces(places);
-                })
-        },
-            (err) => console.error('Error in retrieving position', err),
-            {
-                enableHighAccuracy: true,
-                maximumAge: 0,
-                timeout: 27000,
-            }
-        );
-    }
+    let places = staticLoadPlaces();
+    renderPlaces(places);
 };
 
 function staticLoadPlaces() {
@@ -40,46 +13,51 @@ function staticLoadPlaces() {
             }
         },
         {
-            name: 'Achenweg',
+            name: 'Elfenwiese',
             location: {
-                lat: 47.580444,
-                lng: 12.572649
+                lat: 47.568744,
+                lng: 12.576941
+            }
+        },
+        {
+            name: 'Schefferau Kapelle',
+            location: {
+                lat: 47.576500,
+                lng: 12.586034
+            }
+        },
+        {
+            name: 'Talsenalm',
+            location: {
+                lat: 47.570358,
+                lng: 12.547877
+            }
+        },
+        {
+            name: 'Steinplatte Gipfel',
+            location: {
+                lat: 47.603764,
+                lng: 12.579359
+            }
+        },
+        {
+            name: 'Brunnkopf',
+            location: {
+                lat: 47.559099,
+                lng: 12.598570
+            }
+        },
+        {
+            name: 'Steinberge',
+            location: {
+                lat: 47.551633,
+                lng: 12.610345
             }
         }
     ];
 }
 
-// getting places from REST APIs
-function dynamicLoadPlaces(position) {
-    let params = {
-        radius: 300,    // search places not farther than this value (in meters)
-        clientId: 'HZIJGI4COHQ4AI45QXKCDFJWFJ1SFHYDFCCWKPIJDWHLVQVZ',   // add your credentials here
-        clientSecret: '',   // add your credentials here
-        version: '20300101',    // foursquare versioning, required but unuseful for this demo
-    };
 
-    // CORS Proxy to avoid CORS problems
-    let corsProxy = 'https://cors-anywhere.herokuapp.com/';
-
-    // Foursquare API
-    let endpoint = `${corsProxy}https://api.foursquare.com/v2/venues/search?intent=checkin
-        &ll=${position.latitude},${position.longitude}
-        &radius=${params.radius}
-        &client_id=${params.clientId}
-        &client_secret=${params.clientSecret}
-        &limit=15
-        &v=${params.version}`;
-    return fetch(endpoint)
-        .then((res) => {
-            return res.json()
-                .then((resp) => {
-                    return resp.response.venues;
-                })
-        })
-        .catch((err) => {
-            console.error('Error with places API', err);
-        })
-};
 
 function renderPlaces(places) {
     let scene = document.querySelector('a-scene');
@@ -92,10 +70,10 @@ function renderPlaces(places) {
         const icon = document.createElement('a-image');
         icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
         icon.setAttribute('name', place.name);
-        icon.setAttribute('src', '../assets/map-marker.png');
+        icon.setAttribute('src', './assets/map-marker.png');
 
         // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
-        icon.setAttribute('scale', '20, 20');
+        icon.setAttribute('scale', '10, 10');
 
         icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
 
